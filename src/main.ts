@@ -1,60 +1,90 @@
-import { Project } from './models/Project';
-import { ProjectStorage } from './storage/ProjectStorage';
+import { setupMockUser } from './user/mockUser';
+import { renderUserInfo } from './user/renderUserInfo';
 
-const form = document.querySelector<HTMLFormElement>('#project-form')!;
-const nameInput = document.querySelector<HTMLInputElement>('#name')!;
-const descInput = document.querySelector<HTMLInputElement>('#description')!;
-const list = document.querySelector<HTMLUListElement>('#project-list')!;
+import { renderProjectList } from './project/renderProjectList';
+import { handleProjectForm } from './project/handleProjectForm';
+import { renderProjectSelector } from './project/renderProjectSelector';
 
+import { renderHistoryList } from './history/renderHistoryList';
+import { handleHistoryForm } from './history/handleHistoryForm';
+
+// 🟦 Zmienna do edycji projektów i historyjek
 let editingProjectId: string | null = null;
+let editingHistoryId: string | null = null;
 
-const renderProjects = () => {
-  list.innerHTML = '';
-  const projects = ProjectStorage.getProjects();
+// 🧩 DOM elementy (projekty)
+const projectList = document.querySelector<HTMLUListElement>('#project-list')!;
+const projectNameInput = document.querySelector<HTMLInputElement>('#name')!;
+const projectDescInput = document.querySelector<HTMLInputElement>('#description')!;
+const projectForm = document.querySelector<HTMLFormElement>('#project-form')!;
 
-  for (const project of projects) {
-    const li = document.createElement('li');
-    li.textContent = `${project.name} - ${project.description}`;
+// 🧩 DOM elementy (historyjki)
+const historyForm = document.querySelector<HTMLFormElement>('#history-form')!;
+const historyName = document.querySelector<HTMLInputElement>('#history-name')!;
+const historyDesc = document.querySelector<HTMLInputElement>('#history-description')!;
+const historyPriority = document.querySelector<HTMLSelectElement>('#history-priority')!;
+const historyStatus = document.querySelector<HTMLSelectElement>('#history-status')!;
+const historyList = document.querySelector<HTMLUListElement>('#history-list')!;
+const historyFilter = document.querySelector<HTMLSelectElement>('#status-filter')!;
 
-    const deleteBtn = document.createElement('button');
-    deleteBtn.textContent = 'Usuń';
-    deleteBtn.onclick = () => {
-      ProjectStorage.deleteProject(project.id);
-      renderProjects();
-    };
+// 🧑‍💼 Mock user i info
+setupMockUser();
+renderUserInfo();
 
-    const editBtn = document.createElement('button');
-    editBtn.textContent = 'Edytuj';
-    editBtn.onclick = () => {
-      nameInput.value = project.name;
-      descInput.value = project.description;
-      editingProjectId = project.id;
-    };
+// 📁 Lista projektów
+renderProjectList(projectList, projectNameInput, projectDescInput, id => editingProjectId = id);
 
-    li.appendChild(editBtn);
-    li.appendChild(deleteBtn);
-    list.appendChild(li);
-  }
+// 📝 Formularz projektów
+handleProjectForm(
+  projectForm,
+  projectNameInput,
+  projectDescInput,
+  projectList,
+  () => editingProjectId,
+  () => editingProjectId = null
+);
+
+// 🔽 Dropdown aktywnego projektu
+renderProjectSelector('active-project-selector', () => {
+  renderUserInfo(); // aktualizuj user-info jeśli trzeba
+  renderHistoryList(historyList, historyFilter, (id, name, desc, priority, status) => {
+    editingHistoryId = id;
+    historyName.value = name;
+    historyDesc.value = desc;
+    historyPriority.value = priority;
+    historyStatus.value = status;
+  });
+});
+
+// 📃 Lista historyjek
+renderHistoryList(historyList, historyFilter, (id, name, desc, priority, status) => {
+  editingHistoryId = id;
+  historyName.value = name;
+  historyDesc.value = desc;
+  historyPriority.value = priority;
+  historyStatus.value = status;
+});
+
+// 📝 Formularz historyjek
+handleHistoryForm(
+  historyForm,
+  historyName,
+  historyDesc,
+  historyPriority,
+  historyStatus,
+  historyList,
+  historyFilter,
+  () => editingHistoryId,
+  () => editingHistoryId = null
+);
+
+// 🔄 Filtrowanie historyjek po statusie
+historyFilter.onchange = () => {
+  renderHistoryList(historyList, historyFilter, (id, name, desc, priority, status) => {
+    editingHistoryId = id;
+    historyName.value = name;
+    historyDesc.value = desc;
+    historyPriority.value = priority;
+    historyStatus.value = status;
+  });
 };
-
-form.onsubmit = (e) => {
-  e.preventDefault();
-
-  const project: Project = {
-    id: editingProjectId ?? Date.now().toString(),
-    name: nameInput.value,
-    description: descInput.value,
-  };
-
-  if (editingProjectId) {
-    ProjectStorage.updateProject(project);
-  } else {
-    ProjectStorage.addProject(project);
-  }
-
-  form.reset();
-  editingProjectId = null;
-  renderProjects();
-};
-
-renderProjects();

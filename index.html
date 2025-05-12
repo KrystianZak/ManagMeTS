@@ -1,5 +1,18 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ManagMe - Vanilla TypeScript</title>
+</head>
 <body>
   <div id="app">
+    <p id="user-info"></p>
+    <p id="active-project-info"></p>
+    <div id="active-project-selector"></div>
+
+
+    <!-- 📋 Projekty -->
     <h1>Projekty</h1>
 
     <form id="project-form">
@@ -9,6 +22,44 @@
     </form>
 
     <ul id="project-list"></ul>
+
+    <!-- 📂 Wybór aktywnego projektu -->
+    <!-- select z projektami jest renderowany przez main.ts -->
+
+    <!-- 🧩 Historyjki -->
+    <h2>Historyjki aktywnego projektu</h2>
+
+    <form id="history-form">
+      <input id="history-name" placeholder="Nazwa" required />
+      <input id="history-description" placeholder="Opis" required />
+      <select id="history-priority">
+        <option value="low">Niski</option>
+        <option value="medium">Średni</option>
+        <option value="high">Wysoki</option>
+      </select>
+      <select id="history-status">
+        <option value="todo">Do zrobienia</option>
+        <option value="doing">W trakcie</option>
+        <option value="done">Zrobione</option>
+      </select>
+      <button type="submit">Dodaj historyjkę</button>
+    </form>
+
+    <!-- 🔍 Filtrowanie statusu -->
+    <div>
+      <label for="status-filter">Filtruj według statusu:</label>
+      <select id="status-filter">
+        <option value="all">Wszystkie</option>
+        <option value="todo">Do zrobienia</option>
+        <option value="doing">W trakcie</option>
+        <option value="done">Zrobione</option>
+      </select>
+    </div>
+
+    <!-- 📃 Lista historyjek -->
+    <ul id="history-list"></ul>
   </div>
+
   <script type="module" src="/src/main.ts"></script>
 </body>
+</html>

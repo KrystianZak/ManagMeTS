@@ -11,7 +11,6 @@
     <p id="active-project-info"></p>
     <div id="active-project-selector"></div>
 
-
     <!-- 📋 Projekty -->
     <h1>Projekty</h1>
 
@@ -22,9 +21,6 @@
     </form>
 
     <ul id="project-list"></ul>
-
-    <!-- 📂 Wybór aktywnego projektu -->
-    <!-- select z projektami jest renderowany przez main.ts -->
 
     <!-- 🧩 Historyjki -->
     <h2>Historyjki aktywnego projektu</h2>
@@ -58,6 +54,32 @@
 
     <!-- 📃 Lista historyjek -->
     <ul id="history-list"></ul>
+
+    <!-- ✅ Zadania -->
+    <h2>Zadania</h2>
+
+    <form id="task-form">
+      <input id="task-name" placeholder="Nazwa zadania" required />
+      <input id="task-description" placeholder="Opis" required />
+
+      <select id="task-priority">
+        <option value="low">Niski</option>
+        <option value="medium">Średni</option>
+        <option value="high">Wysoki</option>
+      </select>
+
+      <input type="number" id="task-estimated" placeholder="Czas (h)" min="1" />
+
+      <select id="task-user">
+        <!-- wypełni się dynamicznie -->
+      </select>
+
+      <button type="submit">Dodaj zadanie</button>
+    </form>
+
+    <!-- 📃 Lista zadań -->
+    <ul id="task-list"></ul>
+
   </div>
 
   <script type="module" src="/src/main.ts"></script>

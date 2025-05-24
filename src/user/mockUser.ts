@@ -1,12 +1,11 @@
-import { User } from '../models/User';
 import { UserManager } from '../storage/UserManager';
-
-export const mockUser: User = {
-  id: '1',
-  firstName: 'Krystian',
-  lastName: 'Zak',
-};
+import { mockUsers } from './mockUserList';
 
 export function setupMockUser() {
-  UserManager.setUser(mockUser);
+  const currentUser = mockUsers.find(u => u.role === 'admin');
+  if (currentUser) {
+    UserManager.setUser(currentUser);
+  }
 }
+
+export { mockUsers };

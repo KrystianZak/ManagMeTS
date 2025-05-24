@@ -8,6 +8,8 @@ import { renderProjectSelector } from './project/renderProjectSelector';
 import { renderHistoryList } from './history/renderHistoryList';
 import { handleHistoryForm } from './history/handleHistoryForm';
 
+import { handleTaskForm } from './task/handleTaskForm';
+
 // 🟦 Zmienna do edycji projektów i historyjek
 let editingProjectId: string | null = null;
 let editingHistoryId: string | null = null;
@@ -26,6 +28,15 @@ const historyPriority = document.querySelector<HTMLSelectElement>('#history-prio
 const historyStatus = document.querySelector<HTMLSelectElement>('#history-status')!;
 const historyList = document.querySelector<HTMLUListElement>('#history-list')!;
 const historyFilter = document.querySelector<HTMLSelectElement>('#status-filter')!;
+
+// 🧩 DOM elementy (zadania)
+const taskForm = document.querySelector<HTMLFormElement>('#task-form')!;
+const taskName = document.querySelector<HTMLInputElement>('#task-name')!;
+const taskDescription = document.querySelector<HTMLInputElement>('#task-description')!;
+const taskPriority = document.querySelector<HTMLSelectElement>('#task-priority')!;
+const taskEstimated = document.querySelector<HTMLInputElement>('#task-estimated')!;
+const taskUser = document.querySelector<HTMLSelectElement>('#task-user')!;
+const taskList = document.querySelector<HTMLUListElement>('#task-list')!;
 
 // 🧑‍💼 Mock user i info
 setupMockUser();
@@ -88,3 +99,5 @@ historyFilter.onchange = () => {
     historyStatus.value = status;
   });
 };
+
+handleTaskForm(taskForm, taskName, taskDescription, taskPriority, taskEstimated, taskUser, taskList);

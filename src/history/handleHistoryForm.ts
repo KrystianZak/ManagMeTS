@@ -13,7 +13,8 @@ export function handleHistoryForm(
   listEl: HTMLUListElement,
   filterEl: HTMLSelectElement,
   getEditingId: () => string | null,
-  clearEditingId: () => void
+  clearEditingId: () => void,
+  onEdit: Parameters<typeof renderHistoryList>[2]
 ) {
   form.onsubmit = (e) => {
     e.preventDefault();
@@ -41,6 +42,7 @@ export function handleHistoryForm(
 
     clearEditingId();
     form.reset();
-    renderHistoryList(listEl, filterEl, () => {});
+    renderHistoryList(listEl, filterEl, onEdit); // ← użyj poprawnie przekazanego handlera
   };
 }
+

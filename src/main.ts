@@ -10,7 +10,23 @@ import { handleHistoryForm } from './history/handleHistoryForm';
 
 import { handleTaskForm } from './task/handleTaskForm';
 
-// 🟦 Zmienna do edycji projektów i historyjek
+// Przekierowanie po logowaniu
+if (!localStorage.getItem('token')) {
+  window.location.href = '/login.html';
+}
+
+// Przycisk wyloguj
+const logoutButton = document.querySelector<HTMLButtonElement>('#logout-btn');
+
+if (logoutButton) {
+  logoutButton.addEventListener('click', () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    window.location.href = '/login.html';
+  });
+}
+
+// Zmienne do edycji projektów i historyjek
 let editingProjectId: string | null = null;
 let editingHistoryId: string | null = null;
 
@@ -86,8 +102,16 @@ handleHistoryForm(
   historyList,
   historyFilter,
   () => editingHistoryId,
-  () => editingHistoryId = null
+  () => editingHistoryId = null,
+  (id, name, desc, priority, status) => {
+    editingHistoryId = id;
+    historyName.value = name;
+    historyDesc.value = desc;
+    historyPriority.value = priority;
+    historyStatus.value = status;
+  }
 );
+
 
 // 🔄 Filtrowanie historyjek po statusie
 historyFilter.onchange = () => {
@@ -95,8 +119,9 @@ historyFilter.onchange = () => {
     editingHistoryId = id;
     historyName.value = name;
     historyDesc.value = desc;
-    historyPriority.value = priority;
-    historyStatus.value = status;
+    historyPriority.value = priority as string;
+    historyStatus.value = status as string;
+
   });
 };
 

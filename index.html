@@ -1,88 +1,105 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ManagMe - Vanilla TypeScript</title>
+  <link href="./src/styles/output.css" rel="stylesheet">
 </head>
-<body>
-  <div id="app">
-    <p id="user-info"></p>
-    <button id="logout-btn">Wyloguj</button>
-    <p id="active-project-info"></p>
-    <div id="active-project-selector"></div>
 
-    <!-- 📋 Projekty -->
-    <h1>Projekty</h1>
+<body class="bg-gray-100 font-sans antialiased">
+  <div id="app" class="max-w-screen-lg mx-auto px-6 py-8">
+    <!-- Nagłówek -->
+    <header class="flex justify-between items-center bg-blue-600 text-white p-6 rounded-lg shadow-lg">
+      <p id="user-info" class="text-lg font-semibold">Zalogowany jako: Krystian Zak</p>
+      <div class="flex items-center space-x-4">
+        <button id="logout-btn" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Wyloguj</button>
+        <button id="toggle-theme" class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700">
+          Przełącz tryb
+        </button>
+      </div>
+    </header>
 
-    <form id="project-form">
-      <input type="text" id="name" placeholder="Nazwa projektu" required />
-      <input type="text" id="description" placeholder="Opis projektu" required />
-      <button type="submit">Dodaj</button>
-    </form>
+    <!-- Informacje o aktywnym projekcie -->
+    <div class="mt-8">
+      <p id="active-project-info" class="text-center text-xl font-semibold text-gray-700"></p>
+      <div id="active-project-selector" class="mt-2 text-center">
+        <button class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600">Wybierz projekt</button>
+      </div>
+    </div>
 
-    <ul id="project-list"></ul>
+    <!-- Projekty -->
+    <section class="mt-8">
+      <h1 class="text-3xl font-semibold text-center text-gray-800">Projekty</h1>
+      <form id="project-form" class="space-y-6 mt-6 max-w-md mx-auto">
+        <div class="space-y-2">
+          <input type="text" id="name" placeholder="Nazwa projektu" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required />
+          <input type="text" id="description" placeholder="Opis projektu" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required />
+        </div>
+        <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">Dodaj projekt</button>
+      </form>
+      <ul id="project-list" class="mt-4"></ul>
+    </section>
 
-    <!-- 🧩 Historyjki -->
-    <h2>Historyjki aktywnego projektu</h2>
+    <!-- Historyjki -->
+    <section class="mt-8">
+      <h2 class="text-2xl font-semibold text-center text-gray-800">Historyjki aktywnego projektu</h2>
+      <form id="history-form" class="space-y-6 mt-6 max-w-md mx-auto">
+        <div class="space-y-2">
+          <input id="history-name" placeholder="Nazwa" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required />
+          <input id="history-description" placeholder="Opis" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required />
+          <select id="history-priority" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            <option value="low">Niski</option>
+            <option value="medium">Średni</option>
+            <option value="high">Wysoki</option>
+          </select>
+          <select id="history-status" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            <option value="todo">Do zrobienia</option>
+            <option value="doing">W trakcie</option>
+            <option value="done">Zrobione</option>
+          </select>
+        </div>
+        <button type="submit" class="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600">Dodaj historyjkę</button>
+      </form>
+      <ul id="history-list" class="mt-4"></ul>
+    </section>
 
-    <form id="history-form">
-      <input id="history-name" placeholder="Nazwa" required />
-      <input id="history-description" placeholder="Opis" required />
-      <select id="history-priority">
-        <option value="low">Niski</option>
-        <option value="medium">Średni</option>
-        <option value="high">Wysoki</option>
-      </select>
-      <select id="history-status">
-        <option value="todo">Do zrobienia</option>
-        <option value="doing">W trakcie</option>
-        <option value="done">Zrobione</option>
-      </select>
-      <button type="submit">Dodaj historyjkę</button>
-    </form>
-
-    <!-- 🔍 Filtrowanie statusu -->
-    <div>
-      <label for="status-filter">Filtruj według statusu:</label>
-      <select id="status-filter">
+    <!-- Filtrowanie statusu -->
+    <section class="mt-8">
+      <label for="status-filter" class="block text-sm font-medium text-gray-700">Filtruj według statusu:</label>
+      <select id="status-filter" class="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
         <option value="all">Wszystkie</option>
         <option value="todo">Do zrobienia</option>
         <option value="doing">W trakcie</option>
         <option value="done">Zrobione</option>
       </select>
-    </div>
+    </section>
 
-    <!-- 📃 Lista historyjek -->
-    <ul id="history-list"></ul>
-
-    <!-- ✅ Zadania -->
-    <h2>Zadania</h2>
-
-    <form id="task-form">
-      <input id="task-name" placeholder="Nazwa zadania" required />
-      <input id="task-description" placeholder="Opis" required />
-
-      <select id="task-priority">
-        <option value="low">Niski</option>
-        <option value="medium">Średni</option>
-        <option value="high">Wysoki</option>
-      </select>
-
-      <input type="number" id="task-estimated" placeholder="Czas (h)" min="1" />
-
-      <select id="task-user">
-        <!-- wypełni się dynamicznie -->
-      </select>
-
-      <button type="submit">Dodaj zadanie</button>
-    </form>
-
-    <!-- 📃 Lista zadań -->
-    <ul id="task-list"></ul>
-
+    <!-- Zadania -->
+    <section class="mt-8">
+      <h2 class="text-2xl font-semibold text-center text-gray-800">Zadania</h2>
+      <form id="task-form" class="space-y-6 mt-6 max-w-md mx-auto">
+        <div class="space-y-2">
+          <input id="task-name" placeholder="Nazwa zadania" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required />
+          <input id="task-description" placeholder="Opis" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required />
+          <select id="task-priority" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            <option value="low">Niski</option>
+            <option value="medium">Średni</option>
+            <option value="high">Wysoki</option>
+          </select>
+          <input type="number" id="task-estimated" placeholder="Czas (h)" min="1" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+          <select id="task-user" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            <!-- Użytkownicy dynamicznie -->
+          </select>
+        </div>
+        <button type="submit" class="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600">Dodaj zadanie</button>
+      </form>
+      <ul id="task-list" class="mt-4"></ul>
+    </section>
   </div>
 
   <script type="module" src="/src/main.ts"></script>
 </body>
+
 </html>

@@ -26,6 +26,31 @@ if (logoutButton) {
   });
 }
 
+// Przycisk do zmiany motywu
+const themeToggle = document.querySelector<HTMLButtonElement>('#toggle-theme');
+
+if (themeToggle) {
+  const setTheme = (theme: string) => {
+    document.body.classList.toggle('dark', theme === 'dark');
+    localStorage.setItem('theme', theme); 
+  };
+
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    setTheme(savedTheme); 
+  } else {
+    setTheme('light');
+  }
+
+  themeToggle.addEventListener('click', () => {
+    const currentTheme = document.body.classList.contains('dark') ? 'dark' : 'light';
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    console.log("Przycisk kliknięty, zmieniam motyw na:", newTheme);
+    setTheme(newTheme); 
+  });
+}
+
+
 // Zmienne do edycji projektów i historyjek
 let editingProjectId: string | null = null;
 let editingHistoryId: string | null = null;

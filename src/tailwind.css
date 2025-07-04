@@ -1,0 +1,13 @@
+@import "tailwindcss/base";
+
+@import "tailwindcss/components";
+
+@import "tailwindcss/utilities";
+
+/* Dodaj niestandardowe style dla ciemnego trybu */
+@media (prefers-color-scheme: dark) {
+  .dark {
+    background-color: #333;
+    color: #fff;
+  }
+}

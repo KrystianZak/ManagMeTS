@@ -1,4 +1,4 @@
-import { Task, TaskStatus } from '../models/Task';
+import { Task } from '../models/Task';
 import { mockUsers } from '../user/mockUserList';
 import { TaskStorage } from '../storage/TaskStorage';
 import { ActiveProject } from '../storage/ActiveProject';
@@ -12,7 +12,9 @@ export function handleTaskForm(
     priority: HTMLSelectElement,
     estimated: HTMLInputElement,
     userSelect: HTMLSelectElement,
-    list: HTMLUListElement
+    statusEl: HTMLSelectElement,
+    list: HTMLUListElement,
+    onTaskAdded: () => void
 ) {
     // Wypełnij select użytkowników (devops i developer)
     mockUsers
@@ -43,8 +45,9 @@ export function handleTaskForm(
             description: description.value,
             priority: priority.value as Task['priority'],
             historyId: activeHistory.id,
+            projectId: activeProjectId,
             estimatedTime: parseInt(estimated.value),
-            status: 'todo',
+            status: statusEl.value as Task['status'],
             createdAt: new Date().toISOString(),
             assignedUserId: userSelect.value || ''
         };
@@ -52,15 +55,15 @@ export function handleTaskForm(
         TaskStorage.add(task);
         form.reset();
         render(list);
+        onTaskAdded(); // odśwież tablicę Kanban
     };
 
-    // Renderowanie zadań dla aktywnej historyjki
     const render = (list: HTMLUListElement) => {
         list.innerHTML = '';
         const tasks = TaskStorage.getAll();
 
         const activeProjectId = ActiveProject.get();
-        if (!activeProjectId) return; // 🔐 zabezpieczenie
+        if (!activeProjectId) return;
 
         const histories = HistoryStorage.getByProject(activeProjectId);
         if (histories.length === 0) return;
@@ -76,7 +79,6 @@ export function handleTaskForm(
             list.appendChild(li);
         }
     };
-
 
     render(list);
 }

@@ -20,3 +20,8 @@ export const mockUsers: User[] = [
     role: 'devops',
   },
 ];
+
+// ✅ DODAJ TO:
+export function getUserById(id: string): User | undefined {
+  return mockUsers.find(user => user.id === id);
+}

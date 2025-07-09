@@ -8,6 +8,11 @@ export class TaskStorage {
     return data ? JSON.parse(data) : [];
   }
 
+  // ✅ Dodajemy alias getTasks (żeby pasował do istniejącego kodu)
+  static getTasks(): Task[] {
+    return this.getAll();
+  }
+
   static saveAll(tasks: Task[]) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
   }
@@ -35,4 +40,5 @@ export class TaskStorage {
   static getByUser(userId: string): Task[] {
     return this.getAll().filter(t => t.assignedUserId === userId);
   }
+  
 }

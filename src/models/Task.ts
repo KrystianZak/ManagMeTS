@@ -9,6 +9,7 @@ export interface Task {
   description: string;
   priority: Priority;
   historyId: string;
+  projectId: string;
 
   estimatedTime: number; // przewidywany czas wykonania w godzinach
 

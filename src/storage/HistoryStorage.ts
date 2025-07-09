@@ -27,4 +27,13 @@ export class HistoryStorage {
     const all = this.getAll().filter(h => h.id !== id);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
   }
+
+  // dodane dla renderProjectList:
+  static getStories(): History[] {
+    return this.getAll();
+  }
+
+  static saveAll(stories: History[]): void {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(stories));
+  }
 }
